@@ -52,6 +52,7 @@ class LanguagePack::Ruby < LanguagePack::Base
       build_bundler
       create_database_yml
       install_binaries
+      run_flex_compile_rake_task
       run_assets_precompile_rake_task
     end
   end
@@ -451,5 +452,12 @@ params = CGI.parse(uri.query || "")
       topic "Running: rake assets:precompile"
       pipe("env PATH=$PATH:bin bundle exec rake assets:precompile 2>&1")
     end
+  end
+  
+  def run_flex_compile_rake_task
+    #if rake_task_defined?("assets:precompile")
+      topic "Running: rake flex:compile"
+      pipe("env PATH=$PATH:bin bundle exec rake flex:compile 2>&1")
+    #end
   end
 end
