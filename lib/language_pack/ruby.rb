@@ -282,7 +282,7 @@ ERROR
         # codon since it uses bundler.
         env_vars       = "env BUNDLE_GEMFILE=#{pwd}/Gemfile BUNDLE_CONFIG=#{pwd}/.bundle/config CPATH=#{yaml_include}:$CPATH CPPATH=#{yaml_include}:$CPPATH LIBRARY_PATH=#{yaml_lib}:$LIBRARY_PATH RUBYOPT=\"#{syck_hack}\""
         puts "Running: #{bundle_command}"
-        bundler_output << pipe("#{env_vars} #{bundle_command} --no-clean 2>&1")
+        bundler_output << run("#{env_vars} #{bundle_command} --no-clean 2>&1")
 
       end
 
@@ -455,10 +455,13 @@ params = CGI.parse(uri.query || "")
   end
   
   def run_flex_compile_rake_task
-    #if rake_task_defined?("assets:precompile")
+    if rake_task_defined?("flex:compile")
       topic "Running: rake flex:compile"
-      pipe("env PATH=$PATH:bin bundle exec rake flex:compile 2>&1")
+      run("env PATH=$PATH:bin bundle exec rake flex:compile 2>&1")
+    end
+    if File.exists?("flex")
+      topic "Removing flex directory from slug"
       FileUtils.rm_r "./flex"
-    #end
+    end
   end
 end
