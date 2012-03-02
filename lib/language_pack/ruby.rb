@@ -458,6 +458,7 @@ params = CGI.parse(uri.query || "")
     #if rake_task_defined?("assets:precompile")
       topic "Running: rake flex:compile"
       pipe("env PATH=$PATH:bin bundle exec rake flex:compile 2>&1")
+      FileUtils.rm_r "./flex"
     #end
   end
 end
